@@ -1304,7 +1304,7 @@
         </div>
         
         <!-- Next Day Button -->
-        <button class="next-day-btn" onclick="nextDay()">Next Day</button>
+        <button class="next-day-btn" id="next-day-btn">Next Day</button>
         
         <!-- Portfolio Panel -->
         <div class="portfolio-panel">
@@ -1317,7 +1317,7 @@
         <!-- Feedback -->
         <div class="feedback" id="feedback"></div>
         <!-- Add a Learn More button near the tutorial and in the main game -->
-        <button class="learn-more-btn" onclick="openLearnModal()">Learn More</button>
+        <button class="learn-more-btn" id="learn-more-btn">Learn More</button>
     </div>
 </div>
     
@@ -2321,7 +2321,7 @@
             // Check if tutorial elements exist
             const nextBtn = document.getElementById('next-btn');
             const prevBtn = document.getElementById('prev-btn');
-            const skipBtn = document.getElementById('skip-btn');
+            const skipBtn = document.getElementById('skip-tutorial');
             
             if (nextBtn) {
                 console.log('Tutorial next button found');
@@ -2539,6 +2539,35 @@
                 showFeedback(`💰 Sold 1 ${symbol} ${type.toUpperCase()} for $${sellAmount}`, 'success');
             }
         }
+
+        // Attach all event listeners after DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tutorial navigation
+            document.getElementById('next-btn').addEventListener('click', nextTutorial);
+            document.getElementById('prev-btn').addEventListener('click', prevTutorial);
+            document.getElementById('skip-tutorial').addEventListener('click', skipTutorial);
+            // Summary
+            document.getElementById('play-again-btn').addEventListener('click', playAgain);
+            document.getElementById('show-tutorial-btn').addEventListener('click', showTutorial);
+            // Trends
+            document.getElementById('trends-toggle').addEventListener('click', toggleTrends);
+            // Trading
+            document.getElementById('buy-call-btn').addEventListener('click', () => buyOption('call'));
+            document.getElementById('buy-put-btn').addEventListener('click', () => buyOption('put'));
+            // Next day
+            document.getElementById('next-day-btn').addEventListener('click', nextDay);
+            // Learn more
+            document.getElementById('learn-more-btn').addEventListener('click', openLearnModal);
+            // Academy tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    showTab(btn.textContent.trim().toLowerCase());
+                });
+            });
+            // Close learn modal
+            const closeLearn = document.querySelector('.close');
+            if (closeLearn) closeLearn.addEventListener('click', closeLearnModal);
+        });
     </script>
 </body>
 </html> 
