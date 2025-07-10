@@ -1,0 +1,41 @@
+# Option Hustle Assets Directory
+
+This directory contains all game assets including:
+
+## Required Assets (to be added):
+- assets/bg/game-bg.png
+- assets/bg/tutorial-bg.png  
+- assets/bg/summary-bg.png
+- assets/ui/button.png
+- assets/ui/button-hover.png
+- assets/ui/panel.png
+- assets/icons/cash.png
+- assets/icons/calendar.png
+- assets/icons/chart.png
+- assets/icons/call.png
+- assets/icons/put.png
+- assets/icons/news.png
+- assets/characters/player.png
+- assets/characters/player-happy.png
+- assets/characters/player-sad.png
+- assets/sounds/click.mp3
+- assets/sounds/success.mp3
+- assets/sounds/failure.mp3
+- assets/sounds/cash.mp3
+- assets/sounds/news.mp3
+- assets/sounds/bgm-tutorial.mp3
+- assets/sounds/bgm-game.mp3
+- assets/sounds/bgm-summary.mp3
+- assets/fonts/game-font.ttf
+- assets/animations/chart.json
+- assets/animations/coins.json
+- assets/animations/news.json
+
+## Development Note:
+The game uses fallback assets (colored rectangles and emojis) when actual assets are not available, so it will run even without these files.
+
+## Asset Guidelines:
+- Images: PNG format, optimized for mobile
+- Sounds: MP3 format, compressed for web
+- Fonts: TTF format, web-safe
+- Animations: JSON format (Lottie) or sprite sheets 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option Hustle Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #1a1a2e;
+            font-family: Arial, sans-serif;
+        }
+        #game {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="game"></div>
+    
+    <script src="https://unpkg.com/kaboom@0.5.1/dist/kaboom.js"></script>
+    <script type="module">
+        
+        // Initialize Kaboom
+        kaboom({
+            width: 375,
+            height: 667,
+            background: "#1a1a2e",
+            global: true
+        });
+        
+        // Simple test scene
+        scene("test", () => {
+            add([
+                text("Option Hustle Test", { size: 32, color: rgb(255, 255, 255) }),
+                pos(center().x, center().y - 50)
+            ]);
+            
+            add([
+                text("Kaboom.js is working!", { size: 18, color: rgb(46, 204, 113) }),
+                pos(center().x, center().y)
+            ]);
+            
+            add([
+                text("Click to continue", { size: 16, color: rgb(200, 200, 200) }),
+                pos(center().x, center().y + 50)
+            ]);
+            
+            onClick(() => {
+                add([
+                    text("Great! Game is working!", { size: 24, color: rgb(52, 152, 219) }),
+                    pos(center().x, center().y + 100)
+                ]);
+            });
+        });
+        
+        // Start the test scene
+        go("test");
+    </script>
+</body>
+</html> 

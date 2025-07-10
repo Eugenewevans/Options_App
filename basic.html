@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #1a1a2e;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://unpkg.com/kaboom@0.5.1/dist/kaboom.js"></script>
+    <script>
+        // Basic Kaboom test
+        kaboom({
+            width: 375,
+            height: 667,
+            background: "#1a1a2e"
+        });
+        
+        // Simple scene
+        scene("basic", () => {
+            add([
+                text("Hello World!", { size: 32, color: rgb(255, 255, 255) }),
+                pos(center().x, center().y)
+            ]);
+        });
+        
+        go("basic");
+    </script>
+</body>
+</html> 

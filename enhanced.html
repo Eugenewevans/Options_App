@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option Hustle - Enhanced Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .game-container {
+            width: 375px;
+            height: 667px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            position: relative;
+            border: 3px solid #3498db;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+        
+        /* Tutorial Styles */
+        .tutorial-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .tutorial-content {
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        .tutorial-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .tutorial-title {
+            font-size: 24px;
+            color: #3498db;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .tutorial-description {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            color: #ecf0f1;
+        }
+        
+        .tutorial-progress {
+            font-size: 14px;
+            color: #bdc3c7;
+            margin-bottom: 20px;
+        }
+        
+        .tutorial-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .tutorial-btn {
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tutorial-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .tutorial-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .skip-tutorial {
+            color: #bdc3c7;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        /* Enhanced HUD */
+        .hud {
+            background: linear-gradient(90deg, rgba(44, 62, 80, 0.95) 0%, rgba(52, 73, 94, 0.95) 100%);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .hud-item {
+            text-align: center;
+        }
+        
+        .hud-label {
+            font-size: 12px;
+            color: #bdc3c7;
+            margin-bottom: 5px;
+        }
+        
+        .hud-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .cash-value {
+            color: #2ecc71;
+        }
+        
+        .day-value {
+            color: #ecf0f1;
+        }
+        
+        .portfolio-value {
+            color: #f1c40f;
+        }
+        
+        /* Enhanced News Panel */
+        .news-panel {
+            background: linear-gradient(135deg, rgba(52, 73, 94, 0.95) 0%, rgba(44, 62, 80, 0.95) 100%);
+            margin: 15px;
+            padding: 20px;
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .news-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .news-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        .news-title {
+            color: #3498db;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .news-description {
+            color: #ecf0f1;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        /* Enhanced Trading Buttons */
+        .trading-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px;
+            gap: 15px;
+        }
+        
+        .btn {
+            flex: 1;
+            height: 70px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #1f5f8b 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(-1px);
+        }
+        
+        .btn-icon {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .btn-call {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            border-color: #2ecc71;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .btn-call:hover {
+            background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        .btn-put {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border-color: #e74c3c;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+        
+        .btn-put:hover {
+            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+        
+        /* Enhanced Next Day Button */
+        .next-day-btn {
+            width: calc(100% - 40px);
+            height: 60px;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            border: 2px solid #2ecc71;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+        
+        .next-day-btn:hover {
+            background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        /* Enhanced Portfolio Panel */
+        .portfolio-panel {
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.9) 0%, rgba(52, 73, 94, 0.9) 100%);
+            margin: 20px;
+            padding: 20px;
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .portfolio-title {
+            color: #3498db;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .portfolio-items {
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .portfolio-item {
+            text-align: center;
+        }
+        
+        .portfolio-icon {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .portfolio-label {
+            font-size: 12px;
+            color: #bdc3c7;
+            margin-bottom: 5px;
+        }
+        
+        .portfolio-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .call-value {
+            color: #2ecc71;
+        }
+        
+        .put-value {
+            color: #e74c3c;
+        }
+        
+        /* Enhanced Feedback */
+        .feedback {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+            z-index: 100;
+            border: 2px solid;
+            animation: feedbackPulse 0.5s ease-out;
+        }
+        
+        @keyframes feedbackPulse {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        
+        .feedback.success {
+            border-color: #2ecc71;
+            color: #2ecc71;
+        }
+        
+        .feedback.error {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        
+        /* Summary Screen */
+        .summary-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .summary-content {
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        .summary-title {
+            font-size: 28px;
+            color: #3498db;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .summary-stats {
+            background: rgba(52, 73, 94, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #3498db;
+        }
+        
+        .summary-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .summary-rating {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .summary-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        /* Animations */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Hidden elements */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Tutorial Overlay -->
+        <div class="tutorial-overlay" id="tutorial-overlay">
+            <div class="tutorial-content">
+                <div class="tutorial-icon" id="tutorial-icon">📈</div>
+                <div class="tutorial-title" id="tutorial-title">Welcome to Option Hustle!</div>
+                <div class="tutorial-description" id="tutorial-description">
+                    Learn to trade options like a pro! This game will teach you the basics of call and put options.
+                </div>
+                <div class="tutorial-progress" id="tutorial-progress">1 / 4</div>
+                <div class="tutorial-buttons">
+                    <button class="tutorial-btn" id="prev-btn" onclick="prevTutorial()">Previous</button>
+                    <button class="tutorial-btn" id="next-btn" onclick="nextTutorial()">Next</button>
+                </div>
+                <div class="skip-tutorial" onclick="skipTutorial()">Skip Tutorial</div>
+            </div>
+        </div>
+        
+        <!-- Summary Overlay -->
+        <div class="summary-overlay" id="summary-overlay">
+            <div class="summary-content">
+                <div class="summary-title">Game Complete!</div>
+                <div class="summary-stats" id="summary-stats">
+                    <!-- Stats will be populated here -->
+                </div>
+                <div class="summary-rating" id="summary-rating">📊 Learning Investor!</div>
+                <div class="summary-buttons">
+                    <button class="tutorial-btn" onclick="playAgain()">Play Again</button>
+                    <button class="tutorial-btn" onclick="showTutorial()">Tutorial</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- HUD -->
+        <div class="hud">
+            <div class="hud-item">
+                <div class="hud-label">Cash</div>
+                <div class="hud-value cash-value" id="cash">$1000</div>
+            </div>
+            <div class="hud-item">
+                <div class="hud-label">Day</div>
+                <div class="hud-value day-value" id="day">1/30</div>
+            </div>
+            <div class="hud-item">
+                <div class="hud-label">Portfolio</div>
+                <div class="hud-value portfolio-value" id="portfolio">$1000</div>
+            </div>
+        </div>
+        
+        <!-- News Panel -->
+        <div class="news-panel">
+            <div class="news-header">
+                <div class="news-icon">📰</div>
+                <div class="news-title" id="news-title">Market News</div>
+            </div>
+            <div class="news-description" id="news-description">
+                Click 'Next Day' to see market news!
+            </div>
+        </div>
+        
+        <!-- Trading Buttons -->
+        <div class="trading-buttons">
+            <button class="btn btn-call" onclick="buyOption('calls')">
+                <div class="btn-icon">📈</div>
+                <div>Buy Call</div>
+            </button>
+            <button class="btn btn-put" onclick="buyOption('puts')">
+                <div class="btn-icon">📉</div>
+                <div>Buy Put</div>
+            </button>
+        </div>
+        
+        <!-- Next Day Button -->
+        <button class="next-day-btn" onclick="nextDay()">Next Day</button>
+        
+        <!-- Portfolio Panel -->
+        <div class="portfolio-panel">
+            <div class="portfolio-title">Your Portfolio</div>
+            <div class="portfolio-items">
+                <div class="portfolio-item">
+                    <div class="portfolio-icon">📈</div>
+                    <div class="portfolio-label">Call Options</div>
+                    <div class="portfolio-value call-value" id="call-options">0</div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-icon">📉</div>
+                    <div class="portfolio-label">Put Options</div>
+                    <div class="portfolio-value put-value" id="put-options">0</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Feedback -->
+        <div class="feedback" id="feedback"></div>
+    </div>
+    
+    <script>
+        // Game state
+        let gameState = {
+            cash: 1000,
+            day: 1,
+            maxDays: 30,
+            portfolio: {
+                calls: 0,
+                puts: 0
+            },
+            totalValue: 1000,
+            tutorialCompleted: false
+        };
+        
+        // Tutorial steps
+        const tutorialSteps = [
+            {
+                icon: "📈",
+                title: "Call Options",
+                description: "Call options win when stocks go UP! You're betting the price will rise. Buy calls when you expect good news or market growth."
+            },
+            {
+                icon: "📉",
+                title: "Put Options", 
+                description: "Put options win when stocks go DOWN! You're betting the price will fall. Buy puts when you expect bad news or market decline."
+            },
+            {
+                icon: "💰",
+                title: "Premium Cost",
+                description: "Each option costs $200 (the premium). This is your bet amount. You can buy multiple options to increase your potential winnings!"
+            },
+            {
+                icon: "📰",
+                title: "Market News",
+                description: "Daily news affects which options win. Bullish news = Call options win. Bearish news = Put options win. Watch the market carefully!"
+            }
+        ];
+        
+        let currentTutorialStep = 0;
+        let currentEvent = null;
+        
+        // Enhanced market events
+        const marketEvents = [
+            {
+                title: "Tech Boom! 📈",
+                description: "Tech companies are soaring! New AI breakthroughs and strong earnings reports are driving TechCo stock higher.",
+                effect: "bullish",
+                icon: "📈"
+            },
+            {
+                title: "Tech Crash! 📉",
+                description: "Tech stocks are plummeting! Regulatory concerns and weak earnings are causing a sell-off in TechCo.",
+                effect: "bearish",
+                icon: "📉"
+            },
+            {
+                title: "Retail Surge! 📈",
+                description: "Retail stores are booming! Strong consumer spending and holiday sales are lifting RetailX stock.",
+                effect: "bullish",
+                icon: "📈"
+            },
+            {
+                title: "Retail Slump! 📉",
+                description: "Retail sales are declining! Economic concerns and changing consumer habits are hurting RetailX.",
+                effect: "bearish",
+                icon: "📉"
+            },
+            {
+                title: "Market Rally! 📈",
+                description: "Broad market gains! Positive economic data and investor optimism are driving stocks higher.",
+                effect: "bullish",
+                icon: "📈"
+            },
+            {
+                title: "Market Correction! 📉",
+                description: "Market sell-off! Economic uncertainty and profit-taking are causing stocks to decline.",
+                effect: "bearish",
+                icon: "📉"
+            }
+        ];
+        
+        // Sound effects (using Web Audio API)
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(frequency, duration, type = 'sine') {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        function playSuccessSound() {
+            playSound(800, 0.2);
+            setTimeout(() => playSound(1000, 0.2), 100);
+            setTimeout(() => playSound(1200, 0.3), 200);
+        }
+        
+        function playErrorSound() {
+            playSound(200, 0.3);
+            setTimeout(() => playSound(150, 0.3), 100);
+        }
+        
+        function playClickSound() {
+            playSound(400, 0.1);
+        }
+        
+        // Tutorial functions
+        function showTutorial() {
+            currentTutorialStep = 0;
+            updateTutorial();
+            document.getElementById('tutorial-overlay').style.display = 'flex';
+        }
+        
+        function updateTutorial() {
+            const step = tutorialSteps[currentTutorialStep];
+            document.getElementById('tutorial-icon').textContent = step.icon;
+            document.getElementById('tutorial-title').textContent = step.title;
+            document.getElementById('tutorial-description').textContent = step.description;
+            document.getElementById('tutorial-progress').textContent = `${currentTutorialStep + 1} / ${tutorialSteps.length}`;
+            
+            document.getElementById('prev-btn').disabled = currentTutorialStep === 0;
+            document.getElementById('next-btn').textContent = currentTutorialStep === tutorialSteps.length - 1 ? 'Start Game!' : 'Next';
+        }
+        
+        function nextTutorial() {
+            playClickSound();
+            if (currentTutorialStep < tutorialSteps.length - 1) {
+                currentTutorialStep++;
+                updateTutorial();
+            } else {
+                skipTutorial();
+            }
+        }
+        
+        function prevTutorial() {
+            playClickSound();
+            if (currentTutorialStep > 0) {
+                currentTutorialStep--;
+                updateTutorial();
+            }
+        }
+        
+        function skipTutorial() {
+            playClickSound();
+            gameState.tutorialCompleted = true;
+            document.getElementById('tutorial-overlay').style.display = 'none';
+        }
+        
+        // Update display
+        function updateDisplay() {
+            document.getElementById('cash').textContent = `$${gameState.cash}`;
+            document.getElementById('day').textContent = `${gameState.day}/${gameState.maxDays}`;
+            gameState.totalValue = gameState.cash + (gameState.portfolio.calls * 200) + (gameState.portfolio.puts * 200);
+            document.getElementById('portfolio').textContent = `$${gameState.totalValue}`;
+            document.getElementById('call-options').textContent = gameState.portfolio.calls;
+            document.getElementById('put-options').textContent = gameState.portfolio.puts;
+        }
+        
+        // Buy option with enhanced feedback
+        function buyOption(type) {
+            playClickSound();
+            const cost = 200;
+            
+            if (gameState.cash >= cost) {
+                gameState.cash -= cost;
+                gameState.portfolio[type] += 1;
+                updateDisplay();
+                
+                const message = type === 'calls' ? 'Call Option Purchased! 📈' : 'Put Option Purchased! 📉';
+                showFeedback(message, 'success');
+                playSuccessSound();
+                
+                // Add pulse animation to the button
+                const btn = type === 'calls' ? document.querySelector('.btn-call') : document.querySelector('.btn-put');
+                btn.classList.add('pulse');
+                setTimeout(() => btn.classList.remove('pulse'), 1000);
+                
+            } else {
+                showFeedback('Not enough cash! 💸', 'error');
+                playErrorSound();
+                
+                // Add shake animation to the cash display
+                const cashElement = document.getElementById('cash');
+                cashElement.classList.add('shake');
+                setTimeout(() => cashElement.classList.remove('shake'), 500);
+            }
+        }
+        
+        // Enhanced feedback with animations
+        function showFeedback(message, type) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.className = `feedback ${type}`;
+            feedback.style.display = 'block';
+            
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 2000);
+        }
+        
+        // Generate market event
+        function generateMarketEvent() {
+            const random = Math.random();
+            const eventIndex = Math.floor(random * marketEvents.length);
+            return marketEvents[eventIndex];
+        }
+        
+        // Process day results with enhanced feedback
+        function processDayResults() {
+            if (!currentEvent) return;
+            
+            let winnings = 0;
+            const winAmount = 800;
+            
+            if (currentEvent.effect === "bullish") {
+                winnings = gameState.portfolio.calls * winAmount;
+                gameState.portfolio.calls = 0;
+            } else if (currentEvent.effect === "bearish") {
+                winnings = gameState.portfolio.puts * winAmount;
+                gameState.portfolio.puts = 0;
+            }
+            
+            gameState.cash += winnings;
+            
+            if (winnings > 0) {
+                showFeedback(`🎉 You won $${winnings}! 🎉`, 'success');
+                playSuccessSound();
+            } else if (gameState.portfolio.calls > 0 || gameState.portfolio.puts > 0) {
+                showFeedback('😔 No winnings this day.', 'error');
+                playErrorSound();
+            }
+        }
+        
+        // Next day with enhanced features
+        function nextDay() {
+            playClickSound();
+            processDayResults();
+            
+            currentEvent = generateMarketEvent();
+            document.getElementById('news-title').textContent = currentEvent.title;
+            document.getElementById('news-description').textContent = currentEvent.description;
+            
+            // Update news icon
+            const newsIcon = document.querySelector('.news-icon');
+            newsIcon.textContent = currentEvent.icon;
+            
+            gameState.day++;
+            
+            if (gameState.day > gameState.maxDays) {
+                showSummary();
+                return;
+            }
+            
+            updateDisplay();
+        }
+        
+        // Show summary screen
+        function showSummary() {
+            const profit = gameState.cash - 1000;
+            let rating = "";
+            let ratingColor = "#ecf0f1";
+            
+            if (profit >= 2000) {
+                rating = "🎯 Options Master!";
+                ratingColor = "#2ecc71";
+            } else if (profit >= 500) {
+                rating = "📈 Smart Trader!";
+                ratingColor = "#3498db";
+            } else if (profit >= 0) {
+                rating = "📊 Learning Investor!";
+                ratingColor = "#f1c40f";
+            } else {
+                rating = "📚 Keep Learning!";
+                ratingColor = "#e74c3c";
+            }
+            
+            const summaryStats = document.getElementById('summary-stats');
+            summaryStats.innerHTML = `
+                <div class="summary-stat">
+                    <span>Starting Cash:</span>
+                    <span>$1000</span>
+                </div>
+                <div class="summary-stat">
+                    <span>Final Cash:</span>
+                    <span>$${gameState.cash}</span>
+                </div>
+                <div class="summary-stat">
+                    <span>Profit/Loss:</span>
+                    <span style="color: ${profit >= 0 ? '#2ecc71' : '#e74c3c'}">${profit >= 0 ? '+' : ''}$${profit}</span>
+                </div>
+            `;
+            
+            document.getElementById('summary-rating').textContent = rating;
+            document.getElementById('summary-rating').style.color = ratingColor;
+            document.getElementById('summary-overlay').style.display = 'flex';
+        }
+        
+        // Play again
+        function playAgain() {
+            playClickSound();
+            gameState = {
+                cash: 1000,
+                day: 1,
+                maxDays: 30,
+                portfolio: { calls: 0, puts: 0 },
+                totalValue: 1000,
+                tutorialCompleted: true
+            };
+            currentEvent = null;
+            document.getElementById('news-title').textContent = 'Market News';
+            document.getElementById('news-description').textContent = 'Click \'Next Day\' to see market news!';
+            document.querySelector('.news-icon').textContent = '📰';
+            document.getElementById('summary-overlay').style.display = 'none';
+            updateDisplay();
+        }
+        
+        // Initialize
+        updateDisplay();
+        
+        // Show tutorial on first load
+        if (!gameState.tutorialCompleted) {
+            showTutorial();
+        }
+    </script>
+</body>
+</html> 

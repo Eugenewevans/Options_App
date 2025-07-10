@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alternative Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        #fallback {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="fallback">
+        <h1>Option Hustle</h1>
+        <p>If you see this, Kaboom didn't load properly.</p>
+        <p>This is a fallback version.</p>
+        <button onclick="alert('Game would start here!')">Start Game</button>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/kaboom@0.5.1/dist/kaboom.js"></script>
+    <script>
+        try {
+            // Initialize Kaboom
+            kaboom({
+                width: 375,
+                height: 667,
+                background: "#1a1a2e"
+            });
+            
+            // Hide fallback
+            document.getElementById('fallback').style.display = 'none';
+            
+            // Simple scene
+            scene("alt", () => {
+                add([
+                    text("Kaboom Working!", { size: 32, color: rgb(255, 255, 255) }),
+                    pos(center().x, center().y)
+                ]);
+            });
+            
+            go("alt");
+            
+        } catch (error) {
+            console.error("Kaboom error:", error);
+            // Keep fallback visible
+        }
+    </script>
+</body>
+</html> 

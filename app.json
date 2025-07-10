@@ -1,0 +1,23 @@
+{
+  "name": "Option Hustle",
+  "description": "An educational mobile game that teaches kids the basics of stock options trading",
+  "version": "1.0.0",
+  "author": "Option Hustle Team",
+  "main": "main.js",
+  "width": 375,
+  "height": 667,
+  "scale": "fit",
+  "background": "#1a1a2e",
+  "mobile": true,
+  "fullscreen": true,
+  "orientation": "portrait",
+  "platforms": ["web", "mobile"],
+  "categories": ["education", "finance", "simulation"],
+  "keywords": ["options", "finance", "game", "investing", "stock market", "kids", "education"],
+  "icon": "assets/icons/icon.png",
+  "screenshots": [
+    "assets/screenshots/tutorial.png",
+    "assets/screenshots/game.png", 
+    "assets/screenshots/summary.png"
+  ]
+} 

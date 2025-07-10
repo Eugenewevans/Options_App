@@ -1,0 +1,2316 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option Hustle - Stock Options Edition</title>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .main-scroll {
+            width: 100vw;
+            height: 100vh;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .game-container {
+            width: 375px;
+            min-height: 667px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            position: relative;
+            border: 3px solid #3498db;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin: 20px 0;
+            overflow: visible;
+        }
+        
+        /* Tutorial Styles */
+        .tutorial-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .tutorial-content {
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        .tutorial-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .tutorial-title {
+            font-size: 24px;
+            color: #3498db;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .tutorial-description {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            color: #ecf0f1;
+        }
+        
+        .tutorial-progress {
+            font-size: 14px;
+            color: #bdc3c7;
+            margin-bottom: 20px;
+        }
+        
+        .tutorial-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .tutorial-btn {
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+        
+        .tutorial-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .tutorial-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .skip-tutorial {
+            color: #bdc3c7;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        /* Enhanced HUD */
+        .hud {
+            background: linear-gradient(90deg, rgba(44, 62, 80, 0.95) 0%, rgba(52, 73, 94, 0.95) 100%);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        /* Market Trends Panel */
+        .market-trends {
+            background: linear-gradient(135deg, rgba(52, 73, 94, 0.95) 0%, rgba(44, 62, 80, 0.95) 100%);
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            margin: 10px 15px;
+            padding: 15px;
+            display: none;
+        }
+        
+        .trends-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .trends-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .trends-toggle {
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .trend-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        .trend-item:last-child {
+            border-bottom: none;
+        }
+        
+        .trend-sector {
+            font-size: 14px;
+            color: #ecf0f1;
+        }
+        
+        .trend-direction {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+        
+        .trend-bullish {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .trend-bearish {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        /* Academy Styles */
+        .academy-content {
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .academy-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            background: #34495e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            background: #3498db;
+        }
+        
+        .tab-btn:hover {
+            background: #2980b9;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .example-box {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid #3498db;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        
+        .term-item, .tip-item {
+            background: rgba(52, 73, 94, 0.3);
+            border-radius: 5px;
+            padding: 8px 12px;
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        
+        .term-item strong, .tip-item strong {
+            color: #3498db;
+        }
+        
+        /* Enhanced animations */
+        @keyframes cashRegister {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes toiletFlush {
+            0% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(0.9) rotate(-5deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+            75% { transform: scale(0.95) rotate(-3deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        
+        .cash-register-animation {
+            animation: cashRegister 0.5s ease-in-out;
+        }
+        
+        .toilet-flush-animation {
+            animation: toiletFlush 0.6s ease-in-out;
+        }
+        
+        .hud-item {
+            text-align: center;
+        }
+        
+        .hud-label {
+            font-size: 12px;
+            color: #bdc3c7;
+            margin-bottom: 5px;
+        }
+        
+        .hud-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .cash-value {
+            color: #2ecc71;
+        }
+        
+        .day-value {
+            color: #ecf0f1;
+        }
+        
+        .portfolio-value {
+            color: #f1c40f;
+        }
+        
+        /* Stock Options Grid */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .option-card {
+            background: linear-gradient(135deg, rgba(52, 73, 94, 0.9) 0%, rgba(44, 62, 80, 0.9) 100%);
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .option-card.selected {
+            border-color: #2ecc71;
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.2) 0%, rgba(39, 174, 96, 0.2) 100%);
+        }
+        
+        .option-symbol {
+            font-size: 16px;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 5px;
+        }
+        
+        .option-name {
+            font-size: 12px;
+            color: #bdc3c7;
+            margin-bottom: 5px;
+        }
+        
+        .option-sector {
+            font-size: 10px;
+            color: #95a5a6;
+            margin-bottom: 3px;
+        }
+        
+        .option-strike {
+            font-size: 11px;
+            color: #f39c12;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .option-expiration {
+            font-size: 11px;
+            color: #e74c3c;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .option-greeks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px;
+            font-size: 10px;
+        }
+        
+        .greek-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(52, 73, 94, 0.3);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .greek-label {
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .greek-value {
+            color: #ecf0f1;
+            font-size: 9px;
+        }
+        
+        .option-prices {
+            margin-bottom: 8px;
+        }
+        
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3px;
+            font-size: 12px;
+        }
+        
+        .price-label {
+            color: #bdc3c7;
+        }
+        
+        .price-value {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+        
+        /* Trading Controls */
+        .trading-controls {
+            margin: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .trading-btn {
+            flex: 1;
+            height: 50px;
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .trading-btn:hover {
+            background: linear-gradient(135deg, #2980b9 0%, #1f5f8b 100%);
+            transform: translateY(-2px);
+        }
+        
+        .trading-btn:disabled {
+            background: #95a5a6;
+            border-color: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-call {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            border-color: #2ecc71;
+        }
+        
+        .btn-call:hover:not(:disabled) {
+            background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+        }
+        
+        .btn-put {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border-color: #e74c3c;
+        }
+        
+        .btn-put:hover:not(:disabled) {
+            background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+        }
+        
+        /* Enhanced News Panel */
+        .news-panel {
+            background: linear-gradient(135deg, rgba(52, 73, 94, 0.95) 0%, rgba(44, 62, 80, 0.95) 100%);
+            margin: 15px;
+            padding: 15px;
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .news-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .news-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+        
+        .news-title {
+            color: #3498db;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .news-description {
+            color: #ecf0f1;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        /* Next Day Button */
+        .next-day-btn {
+            width: calc(100% - 30px);
+            height: 50px;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            border: 2px solid #2ecc71;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 15px;
+            transition: all 0.3s;
+        }
+        
+        .next-day-btn:hover {
+            background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+            transform: translateY(-2px);
+        }
+        
+        /* Enhanced Portfolio Panel */
+        .portfolio-panel {
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.9) 0%, rgba(52, 73, 94, 0.9) 100%);
+            margin: 15px;
+            padding: 15px;
+            border: 2px solid #3498db;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .portfolio-title {
+            color: #3498db;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .portfolio-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .portfolio-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background: rgba(52, 73, 94, 0.5);
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+        
+        .portfolio-item.call {
+            border-left-color: #2ecc71;
+        }
+        
+        .portfolio-item.put {
+            border-left-color: #e74c3c;
+        }
+        
+        .portfolio-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .portfolio-icon {
+            font-size: 16px;
+        }
+        
+        .portfolio-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .portfolio-symbol {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ecf0f1;
+        }
+        
+        .portfolio-type {
+            font-size: 12px;
+            color: #bdc3c7;
+        }
+        
+        .portfolio-expiration {
+            font-size: 10px;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .portfolio-expiration-urgent {
+            font-size: 10px;
+            color: #ff6b6b;
+            font-weight: bold;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .portfolio-amount {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .portfolio-amount.call {
+            color: #2ecc71;
+        }
+        
+        .portfolio-amount.put {
+            color: #e74c3c;
+        }
+        
+        /* Enhanced Feedback */
+        .feedback {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+            z-index: 100;
+            border: 2px solid;
+            animation: feedbackPulse 0.5s ease-out;
+        }
+        
+        @keyframes feedbackPulse {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+        
+        .feedback.success {
+            border-color: #2ecc71;
+            color: #2ecc71;
+        }
+        
+        .feedback.error {
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+        
+        /* Summary Screen */
+        .summary-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .summary-content {
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        .summary-title {
+            font-size: 28px;
+            color: #3498db;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .summary-stats {
+            background: rgba(52, 73, 94, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 2px solid #3498db;
+        }
+        
+        .summary-stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .summary-rating {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .summary-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        /* Animations */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        /* Hidden elements */
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(52, 73, 94, 0.3);
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3498db;
+            border-radius: 3px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2980b9;
+        }
+        .learn-more-btn {
+            display: inline-block;
+            margin: 10px auto 0 auto;
+            background: #f1c40f;
+            color: #1a1a2e;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: bold;
+            padding: 8px 18px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .learn-more-btn:hover {
+            background: #f39c12;
+        }
+        .modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: #222a3a;
+            border-radius: 12px;
+            padding: 30px 20px;
+            max-width: 340px;
+            color: #fff;
+            text-align: left;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        .modal-content h2 {
+            color: #f1c40f;
+            margin-top: 0;
+        }
+        .close-modal {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            padding: 6px 16px;
+            cursor: pointer;
+            float: right;
+            margin-top: 10px;
+        }
+        .sell-btn {
+            background: #f1c40f;
+            color: #1a1a2e;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            padding: 4px 10px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .sell-btn:hover {
+            background: #f39c12;
+        }
+    </style>
+</head>
+<body>
+<div class="main-scroll">
+    <div class="game-container">
+        <!-- Options Trading Academy Modal -->
+        <div class="modal" id="learn-modal" style="display:none;">
+            <div class="modal-content academy-content">
+                <span class="close" onclick="closeLearnModal()">&times;</span>
+                <h2>🎓 Options Trading Academy</h2>
+                <div class="academy-tabs">
+                    <button class="tab-btn active" onclick="showTab('basics')">📚 Basics</button>
+                    <button class="tab-btn" onclick="showTab('strategies')">🎯 Strategies</button>
+                    <button class="tab-btn" onclick="showTab('terms')">📖 Terms</button>
+                    <button class="tab-btn" onclick="showTab('greeks')">📊 Greeks</button>
+                    <button class="tab-btn" onclick="showTab('tips')">💡 Game Tips</button>
+                </div>
+                
+                <div id="basics" class="tab-content active">
+                    <h3>What are Options? 🤔</h3>
+                    <p>Options are financial contracts that give you the right (but not the obligation) to buy or sell a stock at a specific price within a certain time period.</p>
+                    
+                    <h3>Strike Price 🎯</h3>
+                    <p>The <strong>strike price</strong> is the predetermined price at which you can buy or sell the stock when you exercise your option.</p>
+                    <div class="example-box">
+                        <strong>Call Example:</strong> Apple stock is $150, you buy a call with $145 strike. You can buy Apple for $145 even if it goes to $170!
+                    </div>
+                    <div class="example-box">
+                        <strong>Put Example:</strong> Tesla stock is $800, you buy a put with $810 strike. You can sell Tesla for $810 even if it drops to $700!
+                    </div>
+                    
+                    <h3>Call Options 📈</h3>
+                    <p>Call options give you the right to BUY a stock at the strike price. You buy calls when you think the stock price will go UP. If the stock rises above the strike price, your call option becomes more valuable!</p>
+                    
+                    <h3>Put Options 📉</h3>
+                    <p>Put options give you the right to SELL a stock at the strike price. You buy puts when you think the stock price will go DOWN. If the stock falls below the strike price, your put option becomes more valuable!</p>
+                    
+                    <h3>Money Status</h3>
+                    <div class="example-box">
+                        <strong>In-the-Money (ITM):</strong> Call option when stock price > strike price, Put option when stock price < strike price
+                    </div>
+                    <div class="example-box">
+                        <strong>At-the-Money (ATM):</strong> When stock price = strike price
+                    </div>
+                    <div class="example-box">
+                        <strong>Out-of-the-Money (OTM):</strong> Call option when stock price < strike price, Put option when stock price > strike price
+                    </div>
+                </div>
+                
+                <div id="strategies" class="tab-content">
+                    <h3>Bullish Strategy</h3>
+                    <p>When you expect a stock to go UP:</p>
+                    <ul>
+                        <li>Buy CALL options</li>
+                        <li>Look for positive news about the company</li>
+                        <li>Watch for earnings reports, product launches</li>
+                        <li>Monitor sector-wide positive trends</li>
+                    </ul>
+                    
+                    <h3>Bearish Strategy</h3>
+                    <p>When you expect a stock to go DOWN:</p>
+                    <ul>
+                        <li>Buy PUT options</li>
+                        <li>Look for negative news about the company</li>
+                        <li>Watch for poor earnings, regulatory issues</li>
+                        <li>Monitor sector-wide negative trends</li>
+                    </ul>
+                    
+                    <h3>Risk Management</h3>
+                    <ul>
+                        <li>Don't invest all your money in one stock</li>
+                        <li>Diversify across different sectors</li>
+                        <li>Pay attention to market trends</li>
+                        <li>Use the market trends panel to guide decisions</li>
+                    </ul>
+                </div>
+                
+                <div id="terms" class="tab-content">
+                    <h3>Essential Options Terms</h3>
+                    
+                    <div class="term-item">
+                        <strong>Premium:</strong> The price you pay for an option ($200 in this game)
+                    </div>
+                    
+                    <div class="term-item">
+                        <strong>Strike Price:</strong> The predetermined price at which you can buy/sell the stock when exercising your option
+                    </div>
+                    
+                    <div class="term-item">
+                        <strong>In-the-Money (ITM):</strong> When an option has intrinsic value (call: stock price > strike, put: stock price < strike)
+                    </div>
+                    
+                    <div class="term-item">
+                        <strong>At-the-Money (ATM):</strong> When the stock price equals the strike price
+                    </div>
+                    
+                    <div class="term-item">
+                        <strong>Out-of-the-Money (OTM):</strong> When an option has no intrinsic value (call: stock price < strike, put: stock price > strike)
+                    </div>
+                    
+                    <div class="term-item">
+                        <strong>Expiration:</strong> When the option expires (next day in this game)
+                    </div>
+                    
+                    <div class="term-item">
+                        <strong>Bullish:</strong> Expecting the market or stock to go UP
+                    </div>
+                    
+                    <div class="term-item">
+                        <strong>Bearish:</strong> Expecting the market or stock to go DOWN
+                    </div>
+                    
+                    <div class="term-item">
+                        <strong>Volatility:</strong> How much a stock price moves up and down
+                    </div>
+                    
+                    <h3>The Greeks</h3>
+                    <div class="term-item">
+                        <strong>Delta (D):</strong> How much the option price changes when the stock price moves $1
+                    </div>
+                    
+                    <div class="term-item">
+                        <strong>Gamma (G):</strong> How much Delta changes when the stock price moves $1
+                    </div>
+                    
+                    <div class="term-item">
+                        <strong>Theta (T):</strong> How much the option loses value each day (time decay)
+                    </div>
+                    
+                    <div class="term-item">
+                        <strong>Vega (V):</strong> How much the option price changes when volatility changes
+                    </div>
+                </div>
+                
+                <div id="greeks" class="tab-content">
+                    <h3>Understanding the Greeks</h3>
+                    
+                    <div class="tip-item">
+                        <strong>Delta (D):</strong> Measures how much your option price changes when the stock moves $1. Higher Delta = more sensitive to stock price changes.
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Gamma (G):</strong> Shows how quickly Delta changes. High Gamma = option value changes rapidly with stock movement.
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Theta (T):</strong> Time decay - how much value your option loses each day. Always negative for buyers.
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Vega (V):</strong> Sensitivity to volatility changes. Higher Vega = more affected by market uncertainty.
+                    </div>
+                    
+                    <h3>Greek Strategy Tips</h3>
+                    
+                    <div class="tip-item">
+                        <strong>High Delta Options:</strong> More expensive but more responsive to stock price changes
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>High Gamma Options:</strong> Great for big moves but lose value quickly if wrong
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>High Theta Options:</strong> Lose value faster over time - better for short-term trades
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>High Vega Options:</strong> Good when you expect volatility to increase
+                    </div>
+                    
+                    <h3>Game Application</h3>
+                    
+                    <div class="tip-item">
+                        <strong>Short Expiration:</strong> Higher Theta (time decay) - use for quick trades
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Long Expiration:</strong> Lower Theta - better for holding longer
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Volatile Stocks:</strong> Higher Vega - good for news-driven trades
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Stable Stocks:</strong> Lower Vega - more predictable pricing
+                    </div>
+                </div>
+                
+                <div id="tips" class="tab-content">
+                    <h3>Game Strategy Tips</h3>
+                    
+                    <div class="tip-item">
+                        <strong>Watch the News:</strong> Daily news tells you which stocks will move and in what direction!
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Check Market Trends:</strong> Use the trends panel to see which sectors are hot or cold
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Match News to Options:</strong> Bullish news = Buy calls, Bearish news = Buy puts
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Manage Your Money:</strong> Don't spend all your cash on one trade - diversify!
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Timing Matters:</strong> Buy options before the news hits - not after!
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Sector Analysis:</strong> News often affects entire sectors, not just one stock
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Market Expansion:</strong> More stocks become available as the game progresses
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Selling Options:</strong> You can sell options before the news for half the premium
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Watch the Greeks:</strong> Higher Delta = more sensitive to price changes, Higher Theta = faster time decay
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Expiration Dates:</strong> Shorter expiration = higher risk/reward, longer expiration = more time for your bet to work
+                    </div>
+                    
+                    <div class="tip-item">
+                        <strong>Strike Prices:</strong> ITM options are more expensive but have higher probability of profit. OTM options are cheaper but riskier!
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Tutorial Overlay -->
+        <div class="tutorial-overlay" id="tutorial-overlay">
+            <div class="tutorial-content">
+                <div class="tutorial-icon" id="tutorial-icon">🎯</div>
+                <div class="tutorial-title" id="tutorial-title">Welcome to Option Hustle!</div>
+                <div class="tutorial-description" id="tutorial-description">
+                    Your goal: Make as much money as possible in 30 days by trading stock options! Start with $1000 and see how much you can grow your portfolio.
+                </div>
+                <div class="tutorial-progress" id="tutorial-progress">1 / 5</div>
+                <div class="tutorial-buttons">
+                    <button class="tutorial-btn" id="prev-btn" onclick="prevTutorial()">Previous</button>
+                    <button class="tutorial-btn" id="next-btn" onclick="nextTutorial()">Next</button>
+                </div>
+                <div class="skip-tutorial" onclick="skipTutorial()">Skip Tutorial</div>
+            </div>
+        </div>
+        
+        <!-- Summary Overlay -->
+        <div class="summary-overlay" id="summary-overlay">
+            <div class="summary-content">
+                <div class="summary-title">Game Complete!</div>
+                <div class="summary-stats" id="summary-stats">
+                    <!-- Stats will be populated here -->
+                </div>
+                <div class="summary-rating" id="summary-rating">📊 Learning Investor!</div>
+                <div class="summary-buttons">
+                    <button class="tutorial-btn" onclick="playAgain()">Play Again</button>
+                    <button class="tutorial-btn" onclick="showTutorial()">Tutorial</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- HUD -->
+        <div class="hud">
+            <div class="hud-item">
+                <div class="hud-label">Cash</div>
+                <div class="hud-value cash-value" id="cash">$1000</div>
+            </div>
+            <div class="hud-item">
+                <div class="hud-label">Day</div>
+                <div class="hud-value day-value" id="day">1/30</div>
+            </div>
+            <div class="hud-item">
+                <div class="hud-label">Portfolio</div>
+                <div class="hud-value portfolio-value" id="portfolio">$1000</div>
+            </div>
+        </div>
+        
+        <!-- Market Trends Panel -->
+        <div class="market-trends" id="market-trends">
+            <div class="trends-header">
+                <div class="trends-title">📊 Market Trends</div>
+                <button class="trends-toggle" onclick="toggleTrends()">Hide</button>
+            </div>
+            <div id="trends-content">
+                <!-- Trends will be populated here -->
+            </div>
+        </div>
+        
+        <!-- Stock Options Grid -->
+        <div class="options-grid" id="options-grid">
+            <!-- Options will be populated here -->
+        </div>
+        
+        <!-- Trading Controls -->
+        <div class="trading-controls">
+            <button class="trading-btn btn-call" id="buy-call-btn" onclick="buyOption('call')" disabled>
+                📈 Buy Call
+            </button>
+            <button class="trading-btn btn-put" id="buy-put-btn" onclick="buyOption('put')" disabled>
+                📉 Buy Put
+            </button>
+        </div>
+        
+        <!-- News Panel -->
+        <div class="news-panel">
+            <div class="news-header">
+                <div class="news-icon">📰</div>
+                <div class="news-title" id="news-title">Market News</div>
+            </div>
+            <div class="news-description" id="news-description">
+                Click 'Next Day' to see market news!
+            </div>
+        </div>
+        
+        <!-- Next Day Button -->
+        <button class="next-day-btn" onclick="nextDay()">Next Day</button>
+        
+        <!-- Portfolio Panel -->
+        <div class="portfolio-panel">
+            <div class="portfolio-title">Your Portfolio</div>
+            <div class="portfolio-items" id="portfolio-items">
+                <div style="text-align: center; color: #bdc3c7; font-size: 14px;">No options purchased yet</div>
+            </div>
+        </div>
+        
+        <!-- Feedback -->
+        <div class="feedback" id="feedback"></div>
+        <!-- Add a Learn More button near the tutorial and in the main game -->
+        <button class="learn-more-btn" onclick="openLearnModal()">Learn More</button>
+    </div>
+</div>
+    
+    <script>
+        // Stock options data with shorter expiration dates, Greeks, and strike prices
+        const stockOptions = [
+            { 
+                symbol: 'AAPL', 
+                name: 'Apple Inc.', 
+                sector: 'Technology', 
+                basePrice: 150,
+                strikePrices: [145, 150, 155, 160],
+                expirationDays: [1, 2, 3, 5],
+                delta: 0.65,
+                gamma: 0.08,
+                theta: -0.12,
+                vega: 0.25
+            },
+            { 
+                symbol: 'MSFT', 
+                name: 'Microsoft Corp.', 
+                sector: 'Technology', 
+                basePrice: 300,
+                strikePrices: [295, 300, 305, 310],
+                expirationDays: [2, 3, 4, 5],
+                delta: 0.58,
+                gamma: 0.06,
+                theta: -0.10,
+                vega: 0.22
+            },
+            { 
+                symbol: 'GOOGL', 
+                name: 'Alphabet Inc.', 
+                sector: 'Technology', 
+                basePrice: 2800,
+                strikePrices: [2790, 2800, 2810, 2820],
+                expirationDays: [1, 2, 3, 5],
+                delta: 0.72,
+                gamma: 0.04,
+                theta: -0.08,
+                vega: 0.18
+            },
+            { 
+                symbol: 'AMZN', 
+                name: 'Amazon.com Inc.', 
+                sector: 'Consumer', 
+                basePrice: 3300,
+                strikePrices: [3290, 3300, 3310, 3320],
+                expirationDays: [2, 3, 4, 5],
+                delta: 0.61,
+                gamma: 0.07,
+                theta: -0.11,
+                vega: 0.24
+            },
+            { 
+                symbol: 'TSLA', 
+                name: 'Tesla Inc.', 
+                sector: 'Automotive', 
+                basePrice: 800,
+                strikePrices: [795, 800, 805, 810],
+                expirationDays: [1, 2, 3, 4],
+                delta: 0.78,
+                gamma: 0.12,
+                theta: -0.15,
+                vega: 0.35
+            },
+            { 
+                symbol: 'NVDA', 
+                name: 'NVIDIA Corp.', 
+                sector: 'Technology', 
+                basePrice: 400,
+                strikePrices: [395, 400, 405, 410],
+                expirationDays: [1, 2, 4, 5],
+                delta: 0.69,
+                gamma: 0.09,
+                theta: -0.13,
+                vega: 0.28
+            },
+            { 
+                symbol: 'JPM', 
+                name: 'JPMorgan Chase', 
+                sector: 'Finance', 
+                basePrice: 150,
+                strikePrices: [145, 150, 155, 160],
+                expirationDays: [2, 3, 4, 5],
+                delta: 0.55,
+                gamma: 0.05,
+                theta: -0.09,
+                vega: 0.20
+            },
+            { 
+                symbol: 'JNJ', 
+                name: 'Johnson & Johnson', 
+                sector: 'Healthcare', 
+                basePrice: 170,
+                strikePrices: [165, 170, 175, 180],
+                expirationDays: [1, 2, 3, 5],
+                delta: 0.52,
+                gamma: 0.04,
+                theta: -0.07,
+                vega: 0.16
+            },
+            { 
+                symbol: 'V', 
+                name: 'Visa Inc.', 
+                sector: 'Finance', 
+                basePrice: 250,
+                strikePrices: [245, 250, 255, 260],
+                expirationDays: [2, 3, 4, 5],
+                delta: 0.63,
+                gamma: 0.06,
+                theta: -0.10,
+                vega: 0.21
+            },
+            { 
+                symbol: 'WMT', 
+                name: 'Walmart Inc.', 
+                sector: 'Consumer', 
+                basePrice: 140,
+                strikePrices: [135, 140, 145, 150],
+                expirationDays: [1, 2, 3, 4],
+                delta: 0.48,
+                gamma: 0.03,
+                theta: -0.06,
+                vega: 0.14
+            },
+            { 
+                symbol: 'PG', 
+                name: 'Procter & Gamble', 
+                sector: 'Consumer', 
+                basePrice: 150,
+                strikePrices: [145, 150, 155, 160],
+                expirationDays: [2, 3, 4, 5],
+                delta: 0.50,
+                gamma: 0.04,
+                theta: -0.08,
+                vega: 0.17
+            },
+            { 
+                symbol: 'UNH', 
+                name: 'UnitedHealth Group', 
+                sector: 'Healthcare', 
+                basePrice: 450,
+                strikePrices: [445, 450, 455, 460],
+                expirationDays: [1, 2, 3, 5],
+                delta: 0.67,
+                gamma: 0.07,
+                theta: -0.11,
+                vega: 0.23
+            },
+            { 
+                symbol: 'HD', 
+                name: 'Home Depot Inc.', 
+                sector: 'Consumer', 
+                basePrice: 320,
+                strikePrices: [315, 320, 325, 330],
+                expirationDays: [2, 3, 4, 5],
+                delta: 0.59,
+                gamma: 0.05,
+                theta: -0.09,
+                vega: 0.19
+            },
+            { 
+                symbol: 'MA', 
+                name: 'Mastercard Inc.', 
+                sector: 'Finance', 
+                basePrice: 350,
+                strikePrices: [345, 350, 355, 360],
+                expirationDays: [1, 2, 3, 4],
+                delta: 0.64,
+                gamma: 0.06,
+                theta: -0.10,
+                vega: 0.20
+            },
+            { 
+                symbol: 'DIS', 
+                name: 'Walt Disney Co.', 
+                sector: 'Entertainment', 
+                basePrice: 180,
+                strikePrices: [175, 180, 185, 190],
+                expirationDays: [1, 2, 3, 4],
+                delta: 0.71,
+                gamma: 0.10,
+                theta: -0.14,
+                vega: 0.29
+            },
+            { 
+                symbol: 'NFLX', 
+                name: 'Netflix Inc.', 
+                sector: 'Entertainment', 
+                basePrice: 500,
+                strikePrices: [495, 500, 505, 510],
+                expirationDays: [1, 2, 3, 5],
+                delta: 0.75,
+                gamma: 0.11,
+                theta: -0.16,
+                vega: 0.32
+            }
+        ];
+        
+        // Game state
+        let gameState = {
+            cash: 1000,
+            day: 1,
+            maxDays: 30,
+            portfolio: {},
+            portfolioExpirations: {}, // Track expiration dates for each option
+            totalValue: 1000,
+            tutorialCompleted: false,
+            availableOptions: stockOptions.slice(0, 6), // Start with 6 options
+            selectedOption: null
+        };
+        
+        // Tutorial steps
+        const tutorialSteps = [
+            {
+                icon: "🎯",
+                title: "Game Objective",
+                description: "Make as much money as possible in 30 days by trading stock options! Start with $1000 and see how much you can grow your portfolio through smart trading decisions."
+            },
+            {
+                icon: "📈",
+                title: "Call Options",
+                description: "Call options win when stocks go UP! You're betting the price will rise. Buy calls when you expect good news or market growth. Prices vary based on market conditions."
+            },
+            {
+                icon: "📉",
+                title: "Put Options", 
+                description: "Put options win when stocks go DOWN! You're betting the price will fall. Buy puts when you expect bad news or market decline. Prices vary based on market conditions."
+            },
+            {
+                icon: "📰",
+                title: "Market News",
+                description: "Daily news affects which options win. Bullish news = Call options win. Bearish news = Put options win. Only options for stocks mentioned in the news are processed!"
+            },
+            {
+                icon: "📊",
+                title: "Portfolio Management",
+                description: "Track your options in the portfolio panel. You can buy multiple options of the same stock. Manage your risk wisely and watch the market trends!"
+            }
+        ];
+        
+        let currentTutorialStep = 0;
+        let currentEvent = null;
+        
+        // Market events by sector with realistic news
+        const marketEvents = {
+            Technology: [
+                {
+                    title: "Apple Reports Record iPhone Sales! 📈",
+                    description: "AAPL stock surges 8% after beating earnings expectations. iPhone 15 sales exceed projections, driving strong revenue growth. Tech sector follows with MSFT, GOOGL, and NVDA all up 3-5%.",
+                    effect: "bullish",
+                    icon: "📈",
+                    affectedStocks: ['AAPL', 'MSFT', 'GOOGL', 'NVDA'],
+                    impact: "AAPL +8%, Tech sector +4%"
+                },
+                {
+                    title: "Tech Regulation Fears Mount! 📉",
+                    description: "AAPL, MSFT, GOOGL, and NVDA fall 5-7% as Congress considers new antitrust regulations. Investors worry about potential breakup of big tech companies.",
+                    effect: "bearish",
+                    icon: "📉",
+                    affectedStocks: ['AAPL', 'MSFT', 'GOOGL', 'NVDA'],
+                    impact: "Tech stocks -6%"
+                },
+                {
+                    title: "AI Breakthrough Drives Tech Rally! 📈",
+                    description: "NVDA leads tech surge with 12% gain on AI chip demand. MSFT and GOOGL follow with 6% gains as AI integration accelerates across products.",
+                    effect: "bullish",
+                    icon: "📈",
+                    affectedStocks: ['NVDA', 'MSFT', 'GOOGL'],
+                    impact: "NVDA +12%, AI stocks +8%"
+                }
+            ],
+            Consumer: [
+                {
+                    title: "Amazon Prime Day Breaks Records! 📈",
+                    description: "AMZN stock jumps 9% after Prime Day sales exceed $12 billion. WMT and HD also benefit from strong consumer spending, up 4-6%.",
+                    effect: "bullish",
+                    icon: "📈",
+                    affectedStocks: ['AMZN', 'WMT', 'HD'],
+                    impact: "AMZN +9%, Retail +5%"
+                },
+                {
+                    title: "Consumer Spending Slows! 📉",
+                    description: "AMZN, WMT, and HD decline 4-6% as inflation concerns reduce consumer spending. Retail sales data shows unexpected weakness.",
+                    effect: "bearish",
+                    icon: "📉",
+                    affectedStocks: ['AMZN', 'WMT', 'HD'],
+                    impact: "Retail stocks -5%"
+                },
+                {
+                    title: "Holiday Shopping Season Strong! 📈",
+                    description: "WMT and HD surge 7-9% on strong Black Friday sales. PG also benefits from increased consumer spending, up 3%.",
+                    effect: "bullish",
+                    icon: "📈",
+                    affectedStocks: ['WMT', 'HD', 'PG'],
+                    impact: "Retail +7%, Consumer +4%"
+                }
+            ],
+            Finance: [
+                {
+                    title: "Fed Signals Rate Cuts! 📈",
+                    description: "JPM, V, and MA rally 6-8% as Federal Reserve hints at interest rate reductions. Banking sector benefits from improved lending margins.",
+                    effect: "bullish",
+                    icon: "📈",
+                    affectedStocks: ['JPM', 'V', 'MA'],
+                    impact: "Banking +7%, Finance +5%"
+                },
+                {
+                    title: "Banking Crisis Concerns! 📉",
+                    description: "JPM, V, and MA fall 5-7% as regional bank failures spark fears of broader financial crisis. Credit card spending also shows signs of slowdown.",
+                    effect: "bearish",
+                    icon: "📉",
+                    affectedStocks: ['JPM', 'V', 'MA'],
+                    impact: "Banking -6%, Finance -4%"
+                },
+                {
+                    title: "Digital Payments Surge! 📈",
+                    description: "V and MA jump 8-10% as digital payment adoption accelerates. Contactless payments grow 40% year-over-year.",
+                    effect: "bullish",
+                    icon: "📈",
+                    affectedStocks: ['V', 'MA'],
+                    impact: "Digital payments +9%"
+                }
+            ],
+            Healthcare: [
+                {
+                    title: "FDA Approves Breakthrough Drug! 📈",
+                    description: "JNJ stock surges 12% after FDA approval of new cancer treatment. UNH also benefits from healthcare innovation, up 5%.",
+                    effect: "bullish",
+                    icon: "📈",
+                    affectedStocks: ['JNJ', 'UNH'],
+                    impact: "JNJ +12%, Healthcare +6%"
+                },
+                {
+                    title: "Drug Pricing Reform Fears! 📉",
+                    description: "JNJ and UNH decline 6-8% as Congress considers drug price controls. Pharmaceutical companies face regulatory pressure.",
+                    effect: "bearish",
+                    icon: "📉",
+                    affectedStocks: ['JNJ', 'UNH'],
+                    impact: "Healthcare -7%"
+                },
+                {
+                    title: "Healthcare Merger News! 📈",
+                    description: "UNH gains 9% on potential merger talks. JNJ also rises 4% as healthcare consolidation accelerates.",
+                    effect: "bullish",
+                    icon: "📈",
+                    affectedStocks: ['UNH', 'JNJ'],
+                    impact: "UNH +9%, Healthcare +5%"
+                }
+            ],
+            Entertainment: [
+                {
+                    title: "Disney+ Subscribers Soar! 📈",
+                    description: "DIS stock jumps 11% as Disney+ adds 15 million new subscribers. NFLX also benefits from streaming growth, up 6%.",
+                    effect: "bullish",
+                    icon: "📈",
+                    affectedStocks: ['DIS', 'NFLX'],
+                    impact: "DIS +11%, Streaming +7%"
+                },
+                {
+                    title: "Streaming Competition Intensifies! 📉",
+                    description: "DIS and NFLX fall 5-7% as new streaming services enter market. Content costs rise while subscriber growth slows.",
+                    effect: "bearish",
+                    icon: "📉",
+                    affectedStocks: ['DIS', 'NFLX'],
+                    impact: "Entertainment -6%"
+                },
+                {
+                    title: "Blockbuster Movie Release! 📈",
+                    description: "DIS gains 8% on record-breaking box office performance. NFLX also rises 4% as original content drives subscriptions.",
+                    effect: "bullish",
+                    icon: "📈",
+                    affectedStocks: ['DIS', 'NFLX'],
+                    impact: "DIS +8%, Entertainment +5%"
+                }
+            ],
+            Automotive: [
+                {
+                    title: "Tesla Delivery Record! 📈",
+                    description: "TSLA stock surges 15% after delivering 500,000 vehicles in Q4. EV adoption accelerates globally, beating expectations.",
+                    effect: "bullish",
+                    icon: "📈",
+                    affectedStocks: ['TSLA'],
+                    impact: "TSLA +15%, EV sector +8%"
+                },
+                {
+                    title: "Tesla Production Issues! 📉",
+                    description: "TSLA falls 8% after factory shutdown and supply chain problems. EV demand concerns also weigh on the stock.",
+                    effect: "bearish",
+                    icon: "📉",
+                    affectedStocks: ['TSLA'],
+                    impact: "TSLA -8%, EV sector -4%"
+                },
+                {
+                    title: "New Tesla Model Launch! 📈",
+                    description: "TSLA gains 12% as new affordable model receives 100,000 pre-orders in first week. EV market share expands.",
+                    effect: "bullish",
+                    icon: "📈",
+                    affectedStocks: ['TSLA'],
+                    impact: "TSLA +12%, EV innovation +6%"
+                }
+            ]
+        };
+        
+        // Sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(frequency, duration, type = 'sine') {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.type = type;
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+        
+        function playSuccessSound() {
+            playSound(800, 0.2);
+            setTimeout(() => playSound(1000, 0.2), 100);
+            setTimeout(() => playSound(1200, 0.3), 200);
+        }
+        
+        function playErrorSound() {
+            playSound(200, 0.3);
+            setTimeout(() => playSound(150, 0.3), 100);
+        }
+        
+        function playClickSound() {
+            playSound(400, 0.1);
+        }
+        
+        // Tutorial functions
+        function showTutorial() {
+            currentTutorialStep = 0;
+            updateTutorial();
+            document.getElementById('tutorial-overlay').style.display = 'flex';
+        }
+        
+        function updateTutorial() {
+            const step = tutorialSteps[currentTutorialStep];
+            document.getElementById('tutorial-icon').textContent = step.icon;
+            document.getElementById('tutorial-title').textContent = step.title;
+            document.getElementById('tutorial-description').textContent = step.description;
+            document.getElementById('tutorial-progress').textContent = `${currentTutorialStep + 1} / ${tutorialSteps.length}`;
+            
+            document.getElementById('prev-btn').disabled = currentTutorialStep === 0;
+            document.getElementById('next-btn').textContent = currentTutorialStep === tutorialSteps.length - 1 ? 'Start Game!' : 'Next';
+        }
+        
+        function nextTutorial() {
+            playClickSound();
+            if (currentTutorialStep < tutorialSteps.length - 1) {
+                currentTutorialStep++;
+                updateTutorial();
+            } else {
+                skipTutorial();
+            }
+        }
+        
+        function prevTutorial() {
+            playClickSound();
+            if (currentTutorialStep > 0) {
+                currentTutorialStep--;
+                updateTutorial();
+            }
+        }
+        
+        function skipTutorial() {
+            playClickSound();
+            gameState.tutorialCompleted = true;
+            document.getElementById('tutorial-overlay').style.display = 'none';
+        }
+        
+        // Calculate dynamic option price based on Greeks, market conditions, time, and strike price
+        function calculateOptionPrice(option, expirationDays, type, strikePrice) {
+            let basePrice = 200; // Base premium
+            
+            // Strike price effect - distance from current stock price
+            const priceDistance = Math.abs(option.basePrice - strikePrice);
+            const strikeEffect = 1 + (priceDistance / option.basePrice) * 0.3;
+            basePrice *= strikeEffect;
+            
+            // Time decay effect (Theta)
+            const timeDecay = option.theta * expirationDays;
+            basePrice += timeDecay;
+            
+            // Volatility effect (Vega) - higher volatility = higher price
+            const volatilityMultiplier = 1 + (option.vega * 0.5);
+            basePrice *= volatilityMultiplier;
+            
+            // Delta effect - higher delta = higher price for calls, lower for puts
+            const deltaEffect = option.delta * 50;
+            if (type === 'call') {
+                basePrice += deltaEffect;
+            } else {
+                basePrice -= deltaEffect;
+            }
+            
+            // Gamma effect - higher gamma = more expensive (more volatile)
+            const gammaEffect = option.gamma * 100;
+            basePrice += gammaEffect;
+            
+            // Market sentiment effect based on current news
+            if (currentEvent && currentEvent.affectedStocks.includes(option.symbol)) {
+                if (currentEvent.effect === 'bullish' && type === 'call') {
+                    basePrice *= 1.2; // Calls more expensive in bullish market
+                } else if (currentEvent.effect === 'bearish' && type === 'put') {
+                    basePrice *= 1.2; // Puts more expensive in bearish market
+                } else if (currentEvent.effect === 'bullish' && type === 'put') {
+                    basePrice *= 0.8; // Puts cheaper in bullish market
+                } else if (currentEvent.effect === 'bearish' && type === 'call') {
+                    basePrice *= 0.8; // Calls cheaper in bearish market
+                }
+            }
+            
+            // Expiration effect - shorter expiration = cheaper (less time value)
+            const expirationEffect = Math.max(0.5, expirationDays / 5);
+            basePrice *= expirationEffect;
+            
+            // Ensure minimum price
+            return Math.max(50, Math.round(basePrice));
+        }
+        
+        // Render stock options with dynamic pricing and strike prices
+        function renderOptions() {
+            const grid = document.getElementById('options-grid');
+            grid.innerHTML = '';
+            
+            gameState.availableOptions.forEach(option => {
+                const card = document.createElement('div');
+                card.className = 'option-card';
+                card.onclick = () => selectOption(option);
+                
+                // Get random expiration date and strike price
+                const randomExpiration = option.expirationDays[Math.floor(Math.random() * option.expirationDays.length)];
+                const randomStrike = option.strikePrices[Math.floor(Math.random() * option.strikePrices.length)];
+                
+                // Calculate dynamic prices for both call and put
+                const callPrice = calculateOptionPrice(option, randomExpiration, 'call', randomStrike);
+                const putPrice = calculateOptionPrice(option, randomExpiration, 'put', randomStrike);
+                
+                // Determine if strike is ITM, ATM, or OTM
+                const currentPrice = option.basePrice;
+                let callStatus = 'OTM';
+                let putStatus = 'OTM';
+                
+                if (randomStrike < currentPrice) {
+                    callStatus = 'ITM';
+                    putStatus = 'OTM';
+                } else if (randomStrike > currentPrice) {
+                    callStatus = 'OTM';
+                    putStatus = 'ITM';
+                } else {
+                    callStatus = 'ATM';
+                    putStatus = 'ATM';
+                }
+                
+                card.innerHTML = `
+                    <div class="option-symbol">${option.symbol}</div>
+                    <div class="option-name">${option.name}</div>
+                    <div class="option-sector">${option.sector}</div>
+                    <div class="option-strike">Strike: $${randomStrike} (${callStatus}/${putStatus})</div>
+                    <div class="option-prices">
+                        <div class="price-item">
+                            <span class="price-label">📈 Call:</span>
+                            <span class="price-value">$${callPrice}</span>
+                        </div>
+                        <div class="price-item">
+                            <span class="price-label">📉 Put:</span>
+                            <span class="price-value">$${putPrice}</span>
+                        </div>
+                    </div>
+                    <div class="option-expiration">Expires: ${randomExpiration} days</div>
+                    <div class="option-greeks">
+                        <div class="greek-item">
+                            <span class="greek-label">D:</span>
+                            <span class="greek-value">${option.delta.toFixed(2)}</span>
+                        </div>
+                        <div class="greek-item">
+                            <span class="greek-label">G:</span>
+                            <span class="greek-value">${option.gamma.toFixed(2)}</span>
+                        </div>
+                        <div class="greek-item">
+                            <span class="greek-label">T:</span>
+                            <span class="greek-value">${option.theta.toFixed(2)}</span>
+                        </div>
+                        <div class="greek-item">
+                            <span class="greek-label">V:</span>
+                            <span class="greek-value">${option.vega.toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+                
+                // Store the calculated prices and strike for this option
+                option.currentCallPrice = callPrice;
+                option.currentPutPrice = putPrice;
+                option.currentExpiration = randomExpiration;
+                option.currentStrike = randomStrike;
+                
+                grid.appendChild(card);
+            });
+        }
+        
+        // Select option
+        function selectOption(option) {
+            playClickSound();
+            gameState.selectedOption = option;
+            
+            // Update card selection
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            event.target.closest('.option-card').classList.add('selected');
+            
+            // Enable trading buttons
+            document.getElementById('buy-call-btn').disabled = false;
+            document.getElementById('buy-put-btn').disabled = false;
+        }
+        
+        // Update display with dynamic pricing
+        function updateDisplay() {
+            document.getElementById('cash').textContent = `$${gameState.cash}`;
+            document.getElementById('day').textContent = `${gameState.day}/${gameState.maxDays}`;
+            
+            // Calculate total value with dynamic pricing
+            let portfolioValue = gameState.cash;
+            Object.keys(gameState.portfolio).forEach(key => {
+                const [symbol, type] = key.split('-');
+                const stockInfo = stockOptions.find(stock => stock.symbol === symbol);
+                if (stockInfo) {
+                    const optionValue = calculateOptionPrice(stockInfo, 1, type, stockInfo.basePrice);
+                    portfolioValue += gameState.portfolio[key] * optionValue;
+                }
+            });
+            gameState.totalValue = portfolioValue;
+            
+            document.getElementById('portfolio').textContent = `$${gameState.totalValue}`;
+            updatePortfolioDisplay();
+        }
+        
+        // Update portfolio display with actual expiration dates
+        function updatePortfolioDisplay() {
+            const portfolioItems = document.getElementById('portfolio-items');
+            const portfolioKeys = Object.keys(gameState.portfolio);
+            
+            if (portfolioKeys.length === 0) {
+                portfolioItems.innerHTML = '<div style="text-align: center; color: #bdc3c7; font-size: 14px;">No options purchased yet</div>';
+                return;
+            }
+            
+            portfolioItems.innerHTML = '';
+            
+            portfolioKeys.forEach(key => {
+                const [symbol, type] = key.split('-');
+                const amount = gameState.portfolio[key];
+                
+                // Get the earliest expiration date for this option
+                const expirations = gameState.portfolioExpirations[key] || [];
+                const daysRemaining = expirations.length > 0 ? Math.max(0, Math.min(...expirations) - gameState.day) : 0;
+                
+                const item = document.createElement('div');
+                item.className = `portfolio-item ${type}`;
+                
+                const expirationText = daysRemaining > 0 ? `${daysRemaining} days left` : 'Expires today!';
+                const expirationClass = daysRemaining <= 1 ? 'portfolio-expiration-urgent' : 'portfolio-expiration';
+                
+                item.innerHTML = `
+                    <div class="portfolio-info">
+                        <div class="portfolio-icon">${type === 'call' ? '📈' : '📉'}</div>
+                        <div class="portfolio-details">
+                            <div class="portfolio-symbol">${symbol}</div>
+                            <div class="portfolio-type">${type.toUpperCase()} Option</div>
+                            <div class="${expirationClass}">${expirationText}</div>
+                        </div>
+                    </div>
+                    <div class="portfolio-amount ${type}">${amount}
+                        <button class="sell-btn" onclick="sellOption('${symbol}','${type}')">Sell</button>
+                    </div>
+                `;
+                
+                portfolioItems.appendChild(item);
+            });
+        }
+        
+        // Buy option with dynamic pricing and expiration tracking
+        function buyOption(type) {
+            if (!gameState.selectedOption) {
+                showFeedback('Please select a stock first!', 'error');
+                return;
+            }
+            
+            playClickSound();
+            
+            // Get the dynamic price for this option type
+            const price = type === 'call' ? gameState.selectedOption.currentCallPrice : gameState.selectedOption.currentPutPrice;
+            
+            if (gameState.cash >= price) {
+                gameState.cash -= price;
+                
+                const key = `${gameState.selectedOption.symbol}-${type}`;
+                gameState.portfolio[key] = (gameState.portfolio[key] || 0) + 1;
+                
+                // Set expiration date for this option
+                const expirationDay = gameState.day + gameState.selectedOption.currentExpiration;
+                
+                if (!gameState.portfolioExpirations[key]) {
+                    gameState.portfolioExpirations[key] = [];
+                }
+                gameState.portfolioExpirations[key].push(expirationDay);
+                
+                updateDisplay();
+                
+                const message = `${gameState.selectedOption.symbol} ${type.toUpperCase()} Option Purchased for $${price}! Expires in ${gameState.selectedOption.currentExpiration} days ${type === 'call' ? '📈' : '📉'}`;
+                showFeedback(message, 'success');
+                playSuccessSound();
+                
+                // Reset selection
+                gameState.selectedOption = null;
+                document.querySelectorAll('.option-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                document.getElementById('buy-call-btn').disabled = true;
+                document.getElementById('buy-put-btn').disabled = true;
+                
+            } else {
+                showFeedback(`Not enough cash! Need $${price} 💸`, 'error');
+                playErrorSound();
+                
+                const cashElement = document.getElementById('cash');
+                cashElement.classList.add('shake');
+                setTimeout(() => cashElement.classList.remove('shake'), 500);
+            }
+        }
+        
+        // Enhanced feedback
+        function showFeedback(message, type) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.className = `feedback ${type}`;
+            feedback.style.display = 'block';
+            
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 2000);
+        }
+        
+        // Generate market event
+        function generateMarketEvent() {
+            const sectors = Object.keys(marketEvents);
+            const randomSector = sectors[Math.floor(Math.random() * sectors.length)];
+            const sectorEvents = marketEvents[randomSector];
+            return sectorEvents[Math.floor(Math.random() * sectorEvents.length)];
+        }
+        
+        // Process day results - only process options affected by news
+        function processDayResults() {
+            if (!currentEvent) return;
+            
+            let totalWinnings = 0;
+            const winAmount = 800;
+            let processedOptions = [];
+            
+            Object.keys(gameState.portfolio).forEach(key => {
+                const [symbol, type] = key.split('-');
+                const amount = gameState.portfolio[key];
+                
+                // Check if this stock is affected by the current event
+                if (currentEvent.affectedStocks.includes(symbol)) {
+                    if ((currentEvent.effect === "bullish" && type === "call") ||
+                        (currentEvent.effect === "bearish" && type === "put")) {
+                        totalWinnings += amount * winAmount;
+                        processedOptions.push(key);
+                    } else {
+                        // Option was wrong direction - still process it but no winnings
+                        processedOptions.push(key);
+                    }
+                }
+            });
+            
+            // Only remove the options that were actually processed (affected by news)
+            processedOptions.forEach(key => {
+                delete gameState.portfolio[key];
+                delete gameState.portfolioExpirations[key];
+            });
+            
+            gameState.cash += totalWinnings;
+            
+            if (totalWinnings > 0) {
+                // Add cash register animation
+                const cashElement = document.getElementById('cash');
+                cashElement.classList.add('cash-register-animation');
+                setTimeout(() => cashElement.classList.remove('cash-register-animation'), 500);
+                
+                playCashRegisterSound();
+                showFeedback(`🎉 You won $${totalWinnings}! 🎉`, 'success');
+            } else if (processedOptions.length > 0) {
+                // Add toilet flush animation for losing money
+                const cashElement = document.getElementById('cash');
+                cashElement.classList.add('toilet-flush-animation');
+                setTimeout(() => cashElement.classList.remove('toilet-flush-animation'), 600);
+                
+                playToiletFlushSound();
+                showFeedback('💸 Lost money on options!', 'error');
+            }
+        }
+        
+        // Expand market
+        function expandMarket() {
+            if (gameState.day === 10 && gameState.availableOptions.length < 8) {
+                gameState.availableOptions = stockOptions.slice(0, 8);
+                showFeedback('🆕 2 new stocks added to market!', 'success');
+            } else if (gameState.day === 15 && gameState.availableOptions.length < 10) {
+                gameState.availableOptions = stockOptions.slice(0, 10);
+                showFeedback('🆕 2 more stocks added to market!', 'success');
+            } else if (gameState.day === 20 && gameState.availableOptions.length < 12) {
+                gameState.availableOptions = stockOptions.slice(0, 12);
+                showFeedback('🆕 2 more stocks added to market!', 'success');
+            } else if (gameState.day === 25 && gameState.availableOptions.length < 14) {
+                gameState.availableOptions = stockOptions.slice(0, 14);
+                showFeedback('🆕 2 more stocks added to market!', 'success');
+            }
+            
+            renderOptions();
+        }
+        
+        // Check for expired options
+        function checkExpiredOptions() {
+            let expiredCount = 0;
+            const expiredOptions = [];
+            
+            Object.keys(gameState.portfolioExpirations).forEach(key => {
+                const expirations = gameState.portfolioExpirations[key];
+                const newExpirations = [];
+                
+                expirations.forEach(expirationDay => {
+                    if (gameState.day >= expirationDay) {
+                        // Option has expired
+                        expiredCount++;
+                        const [symbol, type] = key.split('-');
+                        expiredOptions.push(`${symbol} ${type.toUpperCase()}`);
+                    } else {
+                        newExpirations.push(expirationDay);
+                    }
+                });
+                
+                if (newExpirations.length === 0) {
+                    // All options of this type have expired
+                    delete gameState.portfolio[key];
+                    delete gameState.portfolioExpirations[key];
+                } else {
+                    gameState.portfolioExpirations[key] = newExpirations;
+                    gameState.portfolio[key] = newExpirations.length;
+                }
+            });
+            
+            if (expiredCount > 0) {
+                showFeedback(`⏰ ${expiredCount} option(s) expired: ${expiredOptions.join(', ')}`, 'error');
+                playToiletFlushSound();
+            }
+        }
+        
+        // Next day
+        function nextDay() {
+            playClickSound();
+            
+            // Check for expired options FIRST (before processing results)
+            checkExpiredOptions();
+            
+            // Then process day results for options affected by news
+            processDayResults();
+            
+            currentEvent = generateMarketEvent();
+            document.getElementById('news-title').textContent = currentEvent.title;
+            document.getElementById('news-description').textContent = currentEvent.description;
+            
+            // Add impact information to the news
+            const newsDescription = document.getElementById('news-description');
+            newsDescription.innerHTML = `
+                ${currentEvent.description}
+                <div class="news-impact" style="margin-top: 10px; padding: 8px; background: rgba(52, 152, 219, 0.1); border-radius: 5px; font-size: 12px;">
+                    <strong>Market Impact:</strong> ${currentEvent.impact}
+                </div>
+            `;
+            
+            const newsIcon = document.querySelector('.news-icon');
+            newsIcon.textContent = currentEvent.icon;
+            
+            gameState.day++;
+            
+            // Expand market
+            expandMarket();
+            
+            // Update market trends
+            updateMarketTrends();
+            
+            // Refresh option prices based on new market conditions
+            renderOptions();
+            
+            if (gameState.day > gameState.maxDays) {
+                showSummary();
+                return;
+            }
+            
+            updateDisplay();
+        }
+        
+        // Show summary screen
+        function showSummary() {
+            const profit = gameState.cash - 1000;
+            let rating = "";
+            let ratingColor = "#ecf0f1";
+            
+            if (profit >= 2000) {
+                rating = "🎯 Options Master!";
+                ratingColor = "#2ecc71";
+            } else if (profit >= 500) {
+                rating = "📈 Smart Trader!";
+                ratingColor = "#3498db";
+            } else if (profit >= 0) {
+                rating = "📊 Learning Investor!";
+                ratingColor = "#f1c40f";
+            } else {
+                rating = "📚 Keep Learning!";
+                ratingColor = "#e74c3c";
+            }
+            
+            const summaryStats = document.getElementById('summary-stats');
+            summaryStats.innerHTML = `
+                <div class="summary-stat">
+                    <span>Starting Cash:</span>
+                    <span>$1000</span>
+                </div>
+                <div class="summary-stat">
+                    <span>Final Cash:</span>
+                    <span>$${gameState.cash}</span>
+                </div>
+                <div class="summary-stat">
+                    <span>Profit/Loss:</span>
+                    <span style="color: ${profit >= 0 ? '#2ecc71' : '#e74c3c'}">${profit >= 0 ? '+' : ''}$${profit}</span>
+                </div>
+            `;
+            
+            document.getElementById('summary-rating').textContent = rating;
+            document.getElementById('summary-rating').style.color = ratingColor;
+            document.getElementById('summary-overlay').style.display = 'flex';
+        }
+        
+        // Play again
+        function playAgain() {
+            playClickSound();
+            gameState = {
+                cash: 1000,
+                day: 1,
+                maxDays: 30,
+                portfolio: {},
+                portfolioExpirations: {},
+                totalValue: 1000,
+                tutorialCompleted: true,
+                availableOptions: stockOptions.slice(0, 6),
+                selectedOption: null
+            };
+            currentEvent = null;
+            document.getElementById('news-title').textContent = 'Market News';
+            document.getElementById('news-description').innerHTML = `
+                Click 'Next Day' to see market news!
+                <div class="news-impact" style="margin-top: 10px; padding: 8px; background: rgba(52, 152, 219, 0.1); border-radius: 5px; font-size: 12px;">
+                    <strong>Tip:</strong> News affects specific stocks - buy calls when bullish, puts when bearish!
+                </div>
+            `;
+            document.querySelector('.news-icon').textContent = '📰';
+            document.getElementById('summary-overlay').style.display = 'none';
+            document.getElementById('buy-call-btn').disabled = true;
+            document.getElementById('buy-put-btn').disabled = true;
+            updateDisplay();
+            renderOptions();
+        }
+        
+        // Initialize
+        updateDisplay();
+        renderOptions();
+        
+        // Set initial news with educational tip
+        document.getElementById('news-description').innerHTML = `
+            Click 'Next Day' to see market news!
+            <div class="news-impact" style="margin-top: 10px; padding: 8px; background: rgba(52, 152, 219, 0.1); border-radius: 5px; font-size: 12px;">
+                <strong>Tip:</strong> News affects specific stocks - buy calls when bullish, puts when bearish!
+            </div>
+        `;
+        
+        // Show market trends panel by default
+        document.getElementById('market-trends').style.display = 'block';
+        updateMarketTrends();
+        
+        // Show tutorial on first load
+        if (!gameState.tutorialCompleted) {
+            showTutorial();
+        }
+        // Academy tab functions
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+        
+        // Market trends functions
+        function toggleTrends() {
+            const trendsPanel = document.getElementById('market-trends');
+            const toggleBtn = document.querySelector('.trends-toggle');
+            
+            if (trendsPanel.style.display === 'none' || trendsPanel.style.display === '') {
+                trendsPanel.style.display = 'block';
+                toggleBtn.textContent = 'Hide';
+                updateMarketTrends();
+            } else {
+                trendsPanel.style.display = 'none';
+                toggleBtn.textContent = 'Show';
+            }
+        }
+        
+        function updateMarketTrends() {
+            const trendsContent = document.getElementById('trends-content');
+            const sectors = Object.keys(marketEvents);
+            
+            let trendsHTML = '';
+            sectors.forEach(sector => {
+                const sectorEvents = marketEvents[sector];
+                const bullishEvents = sectorEvents.filter(event => event.effect === 'bullish').length;
+                const bearishEvents = sectorEvents.filter(event => event.effect === 'bearish').length;
+                
+                let trendDirection = 'neutral';
+                let trendClass = '';
+                
+                if (bullishEvents > bearishEvents) {
+                    trendDirection = 'Bullish';
+                    trendClass = 'trend-bullish';
+                } else if (bearishEvents > bullishEvents) {
+                    trendDirection = 'Bearish';
+                    trendClass = 'trend-bearish';
+                }
+                
+                if (trendDirection !== 'neutral') {
+                    trendsHTML += `
+                        <div class="trend-item">
+                            <div class="trend-sector">${sector}</div>
+                            <div class="trend-direction ${trendClass}">${trendDirection}</div>
+                        </div>
+                    `;
+                }
+            });
+            
+            trendsContent.innerHTML = trendsHTML || '<div style="text-align: center; color: #bdc3c7;">No clear trends yet</div>';
+        }
+        
+        // Enhanced sound effects
+        function playCashRegisterSound() {
+            // Simulate cash register sound with audio context
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.2);
+        }
+        
+        function playToiletFlushSound() {
+            // Simulate toilet flush sound
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(200, audioContext.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(50, audioContext.currentTime + 0.3);
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.3);
+        }
+        
+        // Add modal open/close
+        function openLearnModal() {
+            document.getElementById('learn-modal').style.display = 'flex';
+        }
+        function closeLearnModal() {
+            document.getElementById('learn-modal').style.display = 'none';
+        }
+        
+        // Enhanced sellOption function with dynamic pricing
+        function sellOption(symbol, type) {
+            const key = `${symbol}-${type}`;
+            if (gameState.portfolio[key] && gameState.portfolio[key] > 0) {
+                gameState.portfolio[key]--;
+                if (gameState.portfolio[key] === 0) {
+                    delete gameState.portfolio[key];
+                    delete gameState.portfolioExpirations[key];
+                } else {
+                    // Remove one expiration date when selling
+                    if (gameState.portfolioExpirations[key] && gameState.portfolioExpirations[key].length > 0) {
+                        gameState.portfolioExpirations[key].shift(); // Remove the oldest option
+                    }
+                }
+                
+                // Calculate sell amount based on current market conditions
+                const stockInfo = stockOptions.find(stock => stock.symbol === symbol);
+                const sellAmount = stockInfo ? Math.round(calculateOptionPrice(stockInfo, 1, type, stockInfo.basePrice) * 0.5) : 100;
+                gameState.cash += sellAmount;
+                
+                // Add animation to cash display
+                const cashElement = document.getElementById('cash');
+                cashElement.classList.add('cash-register-animation');
+                setTimeout(() => cashElement.classList.remove('cash-register-animation'), 500);
+                
+                // Play cash register sound
+                playCashRegisterSound();
+                
+                updateDisplay();
+                showFeedback(`💰 Sold 1 ${symbol} ${type.toUpperCase()} for $${sellAmount}`, 'success');
+            }
+        }
+    </script>
+</body>
+</html> 

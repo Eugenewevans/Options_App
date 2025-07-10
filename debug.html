@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Option Hustle Debug</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #1a1a2e;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        #debug-info {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background: rgba(0,0,0,0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="debug-info">
+        <h3>Debug Info</h3>
+        <div id="status">Loading...</div>
+    </div>
+    
+    <script src="https://unpkg.com/kaboom@0.5.1/dist/kaboom.js"></script>
+    <script>
+        // Debug info
+        const statusDiv = document.getElementById('status');
+        
+        try {
+            statusDiv.innerHTML = "Kaboom loading...";
+            
+            // Initialize Kaboom
+            kaboom({
+                width: 375,
+                height: 667,
+                background: "#1a1a2e",
+                global: true
+            });
+            
+            statusDiv.innerHTML = "Kaboom initialized successfully!";
+            
+            // Simple test scene
+            scene("debug", () => {
+                statusDiv.innerHTML = "Scene loaded!";
+                
+                add([
+                    text("Option Hustle Debug", { size: 32, color: rgb(255, 255, 255) }),
+                    pos(center().x, center().y - 50)
+                ]);
+                
+                add([
+                    text("If you see this, Kaboom is working!", { size: 18, color: rgb(46, 204, 113) }),
+                    pos(center().x, center().y)
+                ]);
+                
+                add([
+                    text("Click anywhere to test", { size: 16, color: rgb(200, 200, 200) }),
+                    pos(center().x, center().y + 50)
+                ]);
+                
+                onClick(() => {
+                    add([
+                        text("Great! Game engine works!", { size: 24, color: rgb(52, 152, 219) }),
+                        pos(center().x, center().y + 100)
+                    ]);
+                    statusDiv.innerHTML = "Click detected! Game engine working!";
+                });
+            });
+            
+            // Start the debug scene
+            go("debug");
+            
+        } catch (error) {
+            statusDiv.innerHTML = "Error: " + error.message;
+            console.error("Kaboom error:", error);
+        }
+    </script>
+</body>
+</html> 
