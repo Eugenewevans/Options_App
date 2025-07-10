@@ -1228,10 +1228,10 @@
                 </div>
                 <div class="tutorial-progress" id="tutorial-progress">1 / 5</div>
                 <div class="tutorial-buttons">
-                    <button class="tutorial-btn" id="prev-btn" onclick="prevTutorial()">Previous</button>
-                    <button class="tutorial-btn" id="next-btn" onclick="nextTutorial()">Next</button>
+                    <button class="tutorial-btn" id="prev-btn">Previous</button>
+                    <button class="tutorial-btn" id="next-btn">Next</button>
                 </div>
-                <div class="skip-tutorial" onclick="skipTutorial()">Skip Tutorial</div>
+                <div class="skip-tutorial" id="skip-tutorial">Skip Tutorial</div>
             </div>
         </div>
         
@@ -1244,8 +1244,8 @@
                 </div>
                 <div class="summary-rating" id="summary-rating">📊 Learning Investor!</div>
                 <div class="summary-buttons">
-                    <button class="tutorial-btn" onclick="playAgain()">Play Again</button>
-                    <button class="tutorial-btn" onclick="showTutorial()">Tutorial</button>
+                    <button class="tutorial-btn" id="play-again-btn">Play Again</button>
+                    <button class="tutorial-btn" id="show-tutorial-btn">Tutorial</button>
                 </div>
             </div>
         </div>
@@ -1270,7 +1270,7 @@
         <div class="market-trends" id="market-trends">
             <div class="trends-header">
                 <div class="trends-title">📊 Market Trends</div>
-                <button class="trends-toggle" onclick="toggleTrends()">Hide</button>
+                <button class="trends-toggle" id="trends-toggle">Hide</button>
             </div>
             <div id="trends-content">
                 <!-- Trends will be populated here -->
@@ -1284,10 +1284,10 @@
         
         <!-- Trading Controls -->
         <div class="trading-controls">
-            <button class="trading-btn btn-call" id="buy-call-btn" onclick="buyOption('call')" disabled>
+            <button class="trading-btn btn-call" id="buy-call-btn" disabled>
                 📈 Buy Call
             </button>
-            <button class="trading-btn btn-put" id="buy-put-btn" onclick="buyOption('put')" disabled>
+            <button class="trading-btn btn-put" id="buy-put-btn" disabled>
                 📉 Buy Put
             </button>
         </div>
@@ -2319,31 +2319,79 @@
             console.log('DOM loaded, checking for tutorial elements...');
             
             // Check if tutorial elements exist
-            const tutorialNext = document.getElementById('tutorial-next');
-            const tutorialClose = document.getElementById('tutorial-close');
+            const nextBtn = document.getElementById('next-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const skipBtn = document.getElementById('skip-btn');
             
-            if (tutorialNext) {
+            if (nextBtn) {
                 console.log('Tutorial next button found');
-                tutorialNext.addEventListener('click', (e) => {
+                nextBtn.addEventListener('click', (e) => {
                     console.log('Tutorial next clicked');
                     e.preventDefault();
                     e.stopPropagation();
-                    nextTutorialStep();
+                    nextTutorial();
                 });
             } else {
                 console.log('Tutorial next button not found');
             }
             
-            if (tutorialClose) {
-                console.log('Tutorial close button found');
-                tutorialClose.addEventListener('click', (e) => {
-                    console.log('Tutorial close clicked');
+            if (prevBtn) {
+                console.log('Tutorial prev button found');
+                prevBtn.addEventListener('click', (e) => {
+                    console.log('Tutorial prev clicked');
                     e.preventDefault();
                     e.stopPropagation();
-                    closeTutorial();
+                    prevTutorial();
                 });
             } else {
-                console.log('Tutorial close button not found');
+                console.log('Tutorial prev button not found');
+            }
+            
+            if (skipBtn) {
+                console.log('Tutorial skip button found');
+                skipBtn.addEventListener('click', (e) => {
+                    console.log('Tutorial skip clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    skipTutorial();
+                });
+            } else {
+                console.log('Tutorial skip button not found');
+            }
+            
+            // Also check for other interactive elements
+            const buyCallBtn = document.getElementById('buy-call-btn');
+            const buyPutBtn = document.getElementById('buy-put-btn');
+            const nextDayBtn = document.getElementById('next-day-btn');
+            
+            if (buyCallBtn) {
+                console.log('Buy call button found');
+                buyCallBtn.addEventListener('click', (e) => {
+                    console.log('Buy call clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    buyCall();
+                });
+            }
+            
+            if (buyPutBtn) {
+                console.log('Buy put button found');
+                buyPutBtn.addEventListener('click', (e) => {
+                    console.log('Buy put clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    buyPut();
+                });
+            }
+            
+            if (nextDayBtn) {
+                console.log('Next day button found');
+                nextDayBtn.addEventListener('click', (e) => {
+                    console.log('Next day clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    nextDay();
+                });
             }
         });
         // Academy tab functions
