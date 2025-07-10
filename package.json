@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "build": "echo 'No build step required for static files'",
-    "generate-icons": "node generate-icons.js"
+    "build": "echo 'No build step required for static files'"
   },
   "keywords": [
     "options",
@@ -23,8 +22,7 @@
   "dependencies": {
     "express": "^4.18.2",
     "compression": "^1.7.4",
-    "helmet": "^7.0.0",
-    "canvas": "^2.11.2"
+    "helmet": "^7.0.0"
   },
   "engines": {
     "node": ">=16.0.0"

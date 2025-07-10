@@ -43,7 +43,11 @@ app.get('/sw.js', (req, res) => {
 
 // Serve icons
 app.get('/icons/:icon', (req, res) => {
-  res.sendFile(path.join(__dirname, 'icons', req.params.icon));
+  const iconPath = path.join(__dirname, 'icons', req.params.icon);
+  if (req.params.icon.endsWith('.svg')) {
+    res.setHeader('Content-Type', 'image/svg+xml');
+  }
+  res.sendFile(iconPath);
 });
 
 // Main route - serve index.html
