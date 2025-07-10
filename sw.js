@@ -31,7 +31,11 @@ self.addEventListener('fetch', event => {
     caches.match(event.request)
       .then(response => {
         // Return cached version or fetch from network
-        return response || fetch(event.request);
+        return response || fetch(event.request).catch(() => {
+          // Handle network errors gracefully
+          console.log('Network request failed:', event.request.url);
+          return new Response('Network error', { status: 408 });
+        });
       })
   );
 });

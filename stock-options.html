@@ -2274,8 +2274,11 @@
                     })
                     .catch(registrationError => {
                         console.log('SW registration failed: ', registrationError);
+                        // Continue without service worker if it fails
                     });
             });
+        } else {
+            console.log('Service Worker not supported');
         }
 
         // Handle PWA installation
@@ -2310,6 +2313,39 @@
         if (!gameState.tutorialCompleted) {
             showTutorial();
         }
+        
+        // Debug: Add click event listeners with logging
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, checking for tutorial elements...');
+            
+            // Check if tutorial elements exist
+            const tutorialNext = document.getElementById('tutorial-next');
+            const tutorialClose = document.getElementById('tutorial-close');
+            
+            if (tutorialNext) {
+                console.log('Tutorial next button found');
+                tutorialNext.addEventListener('click', (e) => {
+                    console.log('Tutorial next clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    nextTutorialStep();
+                });
+            } else {
+                console.log('Tutorial next button not found');
+            }
+            
+            if (tutorialClose) {
+                console.log('Tutorial close button found');
+                tutorialClose.addEventListener('click', (e) => {
+                    console.log('Tutorial close clicked');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeTutorial();
+                });
+            } else {
+                console.log('Tutorial close button not found');
+            }
+        });
         // Academy tab functions
         function showTab(tabName) {
             // Hide all tab contents
